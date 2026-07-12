@@ -1,0 +1,71 @@
+@model ProyectoFinal_AriasAdrian.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Registro de Estudiante";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus-fill text-primary" style="font-size:2.5rem"></i>
+                    <h3 class="mt-2 fw-bold">Registro de Estudiante</h3>
+                    <p class="text-muted small">Complete los datos para crear su cuenta</p>
+                </div>
+
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="NombreCompleto" class="form-label fw-semibold"></label>
+                        <input asp-for="NombreCompleto" class="form-control" placeholder="Nombre y apellidos completos" />
+                        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Cedula" class="form-label fw-semibold"></label>
+                        <input asp-for="Cedula" class="form-control" placeholder="Ej: 1-1234-5678" />
+                        <span asp-validation-for="Cedula" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold"></label>
+                        <input asp-for="Email" class="form-control" placeholder="correo@ejemplo.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CarreraId" class="form-label fw-semibold"></label>
+                        <select asp-for="CarreraId" asp-items="ViewBag.Carreras" class="form-select">
+                            <option value="">-- Seleccione una carrera --</option>
+                        </select>
+                        <span asp-validation-for="CarreraId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-semibold"></label>
+                        <input asp-for="Password" class="form-control" placeholder="Mínimo 6 caracteres" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Repita su contraseña" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+                        <i class="bi bi-person-check me-2"></i>Crear Cuenta
+                    </button>
+                </form>
+
+                <hr />
+                <div class="text-center small text-muted">
+                    ¿Ya tiene cuenta? <a asp-controller="Account" asp-action="Login">Inicie sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

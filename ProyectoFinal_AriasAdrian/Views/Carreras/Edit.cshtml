@@ -1,0 +1,49 @@
+@model ProyectoFinal_AriasAdrian.Models.Carrera
+@{ ViewData["Title"] = "Editar Carrera"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-warning text-dark fw-semibold">
+                <i class="bi bi-pencil me-2"></i>Editar Carrera
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+                    <div class="mb-3">
+                        <label asp-for="Codigo" class="form-label fw-semibold"></label>
+                        <input asp-for="Codigo" class="form-control" />
+                        <span asp-validation-for="Codigo" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label fw-semibold"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Descripcion" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label asp-for="Semestres" class="form-label fw-semibold"></label>
+                            <input asp-for="Semestres" class="form-control" type="number" />
+                            <span asp-validation-for="Semestres" class="text-danger small"></span>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label asp-for="CreditosTotales" class="form-label fw-semibold"></label>
+                            <input asp-for="CreditosTotales" class="form-control" type="number" />
+                            <span asp-validation-for="CreditosTotales" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning"><i class="bi bi-save me-1"></i>Actualizar</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

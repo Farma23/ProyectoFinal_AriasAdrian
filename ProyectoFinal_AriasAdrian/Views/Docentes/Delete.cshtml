@@ -1,0 +1,19 @@
+@model ProyectoFinal_AriasAdrian.Models.Docente
+@{ ViewData["Title"] = "Eliminar Docente"; }
+<div class="row justify-content-center"><div class="col-md-6">
+<div class="card border-0 shadow-sm">
+<div class="card-header bg-danger text-white fw-semibold"><i class="bi bi-trash me-2"></i>Eliminar Docente</div>
+<div class="card-body p-4">
+    <div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill me-2"></i>¿Está seguro que desea eliminar este docente?</div>
+    <dl class="row">
+        <dt class="col-4">Nombre</dt><dd class="col-8">@Model.NombreCompleto</dd>
+        <dt class="col-4">Correo</dt><dd class="col-8">@Model.Correo</dd>
+        <dt class="col-4">Especialidad</dt><dd class="col-8">@Model.Especialidad</dd>
+    </dl>
+    <form asp-action="Delete"><input type="hidden" asp-for="Id" />
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i>Eliminar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+</div></div></div></div>

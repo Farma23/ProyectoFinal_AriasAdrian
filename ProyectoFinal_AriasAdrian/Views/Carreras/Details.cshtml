@@ -1,0 +1,29 @@
+@model ProyectoFinal_AriasAdrian.Models.Carrera
+@{ ViewData["Title"] = "Detalle de Carrera"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-info text-white fw-semibold">
+                <i class="bi bi-mortarboard me-2"></i>@Model.Nombre
+            </div>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-4">Código</dt><dd class="col-8"><span class="badge bg-primary">@Model.Codigo</span></dd>
+                    <dt class="col-4">Nombre</dt><dd class="col-8">@Model.Nombre</dd>
+                    <dt class="col-4">Descripción</dt><dd class="col-8">@Model.Descripcion</dd>
+                    <dt class="col-4">Semestres</dt><dd class="col-8">@Model.Semestres</dd>
+                    <dt class="col-4">Créditos Totales</dt><dd class="col-8">@Model.CreditosTotales</dd>
+                    <dt class="col-4">Cursos</dt><dd class="col-8">@Model.Cursos.Count</dd>
+                    <dt class="col-4">Estudiantes</dt><dd class="col-8">@Model.Estudiantes.Count</dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-transparent d-flex gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                    <i class="bi bi-pencil me-1"></i>Editar
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>

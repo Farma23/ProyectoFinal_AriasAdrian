@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center py-5">
+    <div class="mb-4">
+        <i class="bi bi-mortarboard-fill text-primary" style="font-size: 4rem;"></i>
+    </div>
+    <h1 class="display-5 fw-bold">Sistema de Matrícula Universitaria</h1>
+    <p class="lead text-muted mb-4">
+        Gestione su matrícula de forma rápida y sencilla. Acceda a su portal estudiantil o regístrese como nuevo estudiante.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg px-4">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+        </a>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg px-4">
+            <i class="bi bi-person-plus me-2"></i>Registrarse
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mt-3">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm text-center p-3">
+            <div class="card-body">
+                <i class="bi bi-person-check text-primary fs-1 mb-3"></i>
+                <h5 class="card-title">Registro Seguro</h5>
+                <p class="card-text text-muted">Cree su cuenta de estudiante con sus datos personales y seleccione su carrera universitaria.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm text-center p-3">
+            <div class="card-body">
+                <i class="bi bi-book text-primary fs-1 mb-3"></i>
+                <h5 class="card-title">Consulte los Cursos</h5>
+                <p class="card-text text-muted">Vea los cursos disponibles para su carrera y consulte información de cada uno.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm text-center p-3">
+            <div class="card-body">
+                <i class="bi bi-clipboard-check text-primary fs-1 mb-3"></i>
+                <h5 class="card-title">Gestione su Matrícula</h5>
+                <p class="card-text text-muted">Matricule los cursos de su elección y consulte su historial de matrículas en cualquier momento.</p>
+            </div>
+        </div>
+    </div>
+</div>

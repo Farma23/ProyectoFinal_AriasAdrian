@@ -1,0 +1,62 @@
+@model ProyectoFinal_AriasAdrian.Models.Curso
+@{ ViewData["Title"] = "Nuevo Curso"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white fw-semibold">
+                <i class="bi bi-plus-circle me-2"></i>Nuevo Curso
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+                    <div class="row">
+                        <div class="col-5 mb-3">
+                            <label asp-for="Codigo" class="form-label fw-semibold"></label>
+                            <input asp-for="Codigo" class="form-control" placeholder="CI-101" />
+                            <span asp-validation-for="Codigo" class="text-danger small"></span>
+                        </div>
+                        <div class="col-7 mb-3">
+                            <label asp-for="Nombre" class="form-label fw-semibold"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="CarreraId" class="form-label fw-semibold"></label>
+                        <select asp-for="CarreraId" asp-items="ViewBag.CarreraId" class="form-select">
+                            <option value="">-- Seleccione --</option>
+                        </select>
+                        <span asp-validation-for="CarreraId" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="DocenteId" class="form-label fw-semibold"></label>
+                        <select asp-for="DocenteId" asp-items="ViewBag.DocenteId" class="form-select">
+                            <option value="">-- Sin asignar --</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 mb-3">
+                            <label asp-for="Creditos" class="form-label fw-semibold"></label>
+                            <input asp-for="Creditos" class="form-control" type="number" min="1" max="10" />
+                            <span asp-validation-for="Creditos" class="text-danger small"></span>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label asp-for="CuposDisponibles" class="form-label fw-semibold"></label>
+                            <input asp-for="CuposDisponibles" class="form-control" type="number" />
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label asp-for="Periodo" class="form-label fw-semibold"></label>
+                            <input asp-for="Periodo" class="form-control" placeholder="2025-I" />
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Guardar</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

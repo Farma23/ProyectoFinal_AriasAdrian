@@ -1,0 +1,31 @@
+@model ProyectoFinal_AriasAdrian.Models.Carrera
+@{ ViewData["Title"] = "Eliminar Carrera"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger border-0 shadow-sm">
+            <div class="card-header bg-danger text-white fw-semibold">
+                <i class="bi bi-trash me-2"></i>Confirmar Eliminación
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    ¿Está seguro de que desea eliminar esta carrera? Esta acción no se puede deshacer.
+                </div>
+                <dl class="row">
+                    <dt class="col-4">Código</dt><dd class="col-8">@Model.Codigo</dd>
+                    <dt class="col-4">Nombre</dt><dd class="col-8">@Model.Nombre</dd>
+                    <dt class="col-4">Semestres</dt><dd class="col-8">@Model.Semestres</dd>
+                    <dt class="col-4">Créditos</dt><dd class="col-8">@Model.CreditosTotales</dd>
+                </dl>
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i>Sí, eliminar</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

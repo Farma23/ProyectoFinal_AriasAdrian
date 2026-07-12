@@ -1,0 +1,89 @@
+@model ProyectoFinal_AriasAdrian.Models.Estudiante
+@{
+    ViewData["Title"] = "Mi Portal";
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-warning">No se encontró su perfil de estudiante. Contacte al administrador.</div>
+}
+else
+{
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0"><i class="bi bi-house me-2 text-primary"></i>Bienvenido, @Model.NombreCompleto</h2>
+            <p class="text-muted mb-0">@Model.Carrera?.Nombre — Período 2025-I</p>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-4">
+            <div class="card border-0 shadow-sm text-center p-3">
+                <div class="fs-2 fw-bold text-primary">@Model.Matriculas.Count</div>
+                <div class="text-muted small">Cursos Matriculados</div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card border-0 shadow-sm text-center p-3">
+                <div class="fs-2 fw-bold text-success">
+                    @Model.Matriculas.Where(m => m.Estado == EstadoMatricula.Activa).Sum(m => m.Curso?.Creditos ?? 0)
+                </div>
+                <div class="text-muted small">Créditos Inscritos</div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card border-0 shadow-sm text-center p-3">
+                <div class="fs-5 fw-bold text-warning">@Model.Carrera?.Nombre</div>
+                <div class="text-muted small">Mi Carrera</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <span class="fw-semibold"><i class="bi bi-clipboard-check me-2"></i>Mis Cursos Matriculados</span>
+            <a asp-controller="Carreras" asp-action="Index" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus me-1"></i>Ver Carreras
+            </a>
+        </div>
+        @if (!Model.Matriculas.Any())
+        {
+            <div class="card-body text-center text-muted py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                No tiene cursos matriculados. Explore las carreras disponibles.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Código</th>
+                            <th>Curso</th>
+                            <th>Docente</th>
+                            <th>Créditos</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model.Matriculas)
+                        {
+                            <tr>
+                                <td><span class="badge bg-primary">@m.Curso?.Codigo</span></td>
+                                <td>@m.Curso?.Nombre</td>
+                                <td class="text-muted">@m.Curso?.Docente?.NombreCompleto</td>
+                                <td>@m.Curso?.Creditos</td>
+                                <td>
+                                    <span class="badge @(m.Estado == EstadoMatricula.Activa ? "bg-success" : "bg-secondary")">
+                                        @m.Estado
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}
