@@ -1,0 +1,34 @@
+@* Partial reutilizable para mostrar los controles de paginación.
+   Espera un ViewData con: "PageIndex", "TotalPages" y "RouteValues" (dict con los filtros actuales). *@
+@{
+    int pageIndex = (int)ViewData["PageIndex"]!;
+    int totalPages = (int)ViewData["TotalPages"]!;
+    var routeValues = ViewData["RouteValues"] as Dictionary<string, string?> ?? new Dictionary<string, string?>();
+
+    Dictionary<string, string?> ValuesFor(int page)
+    {
+        var dict = new Dictionary<string, string?>(routeValues) { ["pagina"] = page.ToString() };
+        return dict;
+    }
+}
+
+@if (totalPages > 1)
+{
+    <nav aria-label="Paginación" class="d-flex justify-content-between align-items-center mt-3">
+        <span class="text-muted small">Página @pageIndex de @totalPages</span>
+        <ul class="pagination mb-0">
+            <li class="page-item @(pageIndex <= 1 ? "disabled" : "")">
+                <a class="page-link" asp-all-route-data="ValuesFor(pageIndex - 1)">Anterior</a>
+            </li>
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == pageIndex ? "active" : "")">
+                    <a class="page-link" asp-all-route-data="ValuesFor(i)">@i</a>
+                </li>
+            }
+            <li class="page-item @(pageIndex >= totalPages ? "disabled" : "")">
+                <a class="page-link" asp-all-route-data="ValuesFor(pageIndex + 1)">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+}

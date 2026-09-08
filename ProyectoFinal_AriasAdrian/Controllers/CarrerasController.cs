@@ -6,7 +6,10 @@ using ProyectoFinal_AriasAdrian.Models;
 
 namespace ProyectoFinal_AriasAdrian.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    // Index y Details son visibles para cualquier usuario autenticado
+    // (el estudiante necesita poder explorar las carreras); las acciones
+    // de escritura (Create/Edit/Delete) se restringen a Administrador.
+    [Authorize]
     public class CarrerasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,9 +20,31 @@ namespace ProyectoFinal_AriasAdrian.Controllers
         }
 
         // GET: Carreras
-        public async Task<IActionResult> Index()
+        // Soporta búsqueda por nombre/código y paginación (6 por página,
+        // ya que se muestran como tarjetas en 3 columnas).
+        public async Task<IActionResult> Index(string? buscar, int pagina = 1)
         {
-            return View(await _context.Carreras.ToListAsync());
+            const int tamanoPagina = 6;
+
+            var query = _context.Carreras.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+                query = query.Where(c => c.Nombre.Contains(buscar) || c.Codigo.Contains(buscar));
+
+            query = query.OrderBy(c => c.Nombre);
+
+            ViewBag.Buscar = buscar;
+
+            var carrerasPaginadas = await PaginatedList<Carrera>.CreateAsync(query, pagina, tamanoPagina);
+
+            ViewData["PageIndex"] = carrerasPaginadas.PageIndex;
+            ViewData["TotalPages"] = carrerasPaginadas.TotalPages;
+            ViewData["RouteValues"] = new Dictionary<string, string?>
+            {
+                ["buscar"] = buscar
+            };
+
+            return View(carrerasPaginadas);
         }
 
         // GET: Carreras/Details/5
@@ -35,10 +60,12 @@ namespace ProyectoFinal_AriasAdrian.Controllers
         }
 
         // GET: Carreras/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create() => View();
 
         // POST: Carreras/Create
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Codigo,Nombre,Descripcion,Semestres,CreditosTotales")] Carrera carrera)
         {
@@ -53,6 +80,7 @@ namespace ProyectoFinal_AriasAdrian.Controllers
         }
 
         // GET: Carreras/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -63,6 +91,7 @@ namespace ProyectoFinal_AriasAdrian.Controllers
 
         // POST: Carreras/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Codigo,Nombre,Descripcion,Semestres,CreditosTotales")] Carrera carrera)
         {
@@ -86,6 +115,7 @@ namespace ProyectoFinal_AriasAdrian.Controllers
         }
 
         // GET: Carreras/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -96,6 +126,7 @@ namespace ProyectoFinal_AriasAdrian.Controllers
 
         // POST: Carreras/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

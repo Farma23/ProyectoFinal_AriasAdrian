@@ -13,7 +13,29 @@
     }
 </div>
 
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small text-muted">Buscar por código o nombre</label>
+                <input type="text" name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Ej. ING-SIS o Sistemas" />
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill"><i class="bi bi-funnel me-1"></i>Filtrar</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="row g-3">
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center text-muted py-5">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            No se encontraron carreras con los filtros seleccionados.
+        </div>
+    }
     @foreach (var c in Model)
     {
         <div class="col-md-6 col-xl-4">
@@ -26,21 +48,23 @@
                     <h5 class="card-title">@c.Nombre</h5>
                     <p class="card-text text-muted small">@c.Descripcion</p>
                 </div>
-                @if (User.IsInRole("Administrador"))
-                {
-                    <div class="card-footer bg-transparent d-flex gap-2">
+                <div class="card-footer bg-transparent d-flex gap-2">
+                    <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-eye"></i> Detalles
+                    </a>
+                    @if (User.IsInRole("Administrador"))
+                    {
                         <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-outline-warning">
                             <i class="bi bi-pencil"></i> Editar
-                        </a>
-                        <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline-info">
-                            <i class="bi bi-eye"></i> Detalles
                         </a>
                         <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-sm btn-outline-danger">
                             <i class="bi bi-trash"></i> Eliminar
                         </a>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </div>
     }
 </div>
+
+<partial name="_Pagination" />

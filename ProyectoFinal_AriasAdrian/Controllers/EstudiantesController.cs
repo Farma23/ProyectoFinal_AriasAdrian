@@ -69,12 +69,31 @@ namespace ProyectoFinal_AriasAdrian.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var estudiante = await _context.Estudiantes.FindAsync(id);
-            if (estudiante != null)
+            if (estudiante == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            bool tieneMatriculas = await _context.Matriculas.AnyAsync(m => m.EstudianteId == id);
+            if (tieneMatriculas)
+            {
+                TempData["Error"] = "No se puede eliminar este estudiante porque tiene matrículas registradas (activas o en historial). " +
+                                     "Si desea que deje de aparecer como estudiante activo, edítelo y desmarque la casilla 'Activo' en lugar de eliminarlo.";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
+            try
             {
                 _context.Estudiantes.Remove(estudiante);
                 await _context.SaveChangesAsync();
                 TempData["Exito"] = "Estudiante eliminado exitosamente.";
             }
+            catch (DbUpdateException)
+            {
+                TempData["Error"] = "No se pudo eliminar el estudiante porque tiene información relacionada en el sistema.";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

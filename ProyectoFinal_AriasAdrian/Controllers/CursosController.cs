@@ -18,13 +18,51 @@ namespace ProyectoFinal_AriasAdrian.Controllers
         }
 
         // GET: Cursos
-        public async Task<IActionResult> Index()
+        // Soporta filtros por carrera, período, créditos y búsqueda de texto,
+        // además de paginación (5 elementos por página).
+        public async Task<IActionResult> Index(string? buscar, int? carreraId, string? periodo, int? creditos, int pagina = 1)
         {
-            var cursos = await _context.Cursos
+            const int tamanoPagina = 5;
+
+            var query = _context.Cursos
                 .Include(c => c.Carrera)
                 .Include(c => c.Docente)
-                .ToListAsync();
-            return View(cursos);
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+                query = query.Where(c => c.Nombre.Contains(buscar) || c.Codigo.Contains(buscar));
+
+            if (carreraId.HasValue)
+                query = query.Where(c => c.CarreraId == carreraId.Value);
+
+            if (!string.IsNullOrWhiteSpace(periodo))
+                query = query.Where(c => c.Periodo == periodo);
+
+            if (creditos.HasValue)
+                query = query.Where(c => c.Creditos == creditos.Value);
+
+            query = query.OrderBy(c => c.Codigo);
+
+            ViewBag.Carreras = new SelectList(await _context.Carreras.ToListAsync(), "Id", "Nombre", carreraId);
+            ViewBag.Periodos = await _context.Cursos.Select(c => c.Periodo).Distinct().ToListAsync();
+            ViewBag.Buscar = buscar;
+            ViewBag.CarreraId = carreraId;
+            ViewBag.Periodo = periodo;
+            ViewBag.Creditos = creditos;
+
+            var cursosPaginados = await PaginatedList<Curso>.CreateAsync(query, pagina, tamanoPagina);
+
+            ViewData["PageIndex"] = cursosPaginados.PageIndex;
+            ViewData["TotalPages"] = cursosPaginados.TotalPages;
+            ViewData["RouteValues"] = new Dictionary<string, string?>
+            {
+                ["buscar"] = buscar,
+                ["carreraId"] = carreraId?.ToString(),
+                ["periodo"] = periodo,
+                ["creditos"] = creditos?.ToString()
+            };
+
+            return View(cursosPaginados);
         }
 
         // GET: Cursos/Details/5

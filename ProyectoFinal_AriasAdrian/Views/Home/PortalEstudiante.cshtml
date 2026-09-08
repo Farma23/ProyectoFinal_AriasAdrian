@@ -19,7 +19,7 @@ else
     <div class="row g-3 mb-4">
         <div class="col-sm-4">
             <div class="card border-0 shadow-sm text-center p-3">
-                <div class="fs-2 fw-bold text-primary">@Model.Matriculas.Count</div>
+                <div class="fs-2 fw-bold text-primary">@Model.Matriculas.Count(m => m.Estado == EstadoMatricula.Activa)</div>
                 <div class="text-muted small">Cursos Matriculados</div>
             </div>
         </div>
@@ -39,18 +39,23 @@ else
         </div>
     </div>
 
+    <div id="alertaPortal"></div>
+
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
             <span class="fw-semibold"><i class="bi bi-clipboard-check me-2"></i>Mis Cursos Matriculados</span>
-            <a asp-controller="Carreras" asp-action="Index" class="btn btn-sm btn-primary">
-                <i class="bi bi-plus me-1"></i>Ver Carreras
+            <a asp-controller="Matricula" asp-action="Disponibles" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-circle me-1"></i>Matricular Cursos
             </a>
         </div>
-        @if (!Model.Matriculas.Any())
+        @{
+            var matriculasActivas = Model.Matriculas.Where(m => m.Estado == EstadoMatricula.Activa).ToList();
+        }
+        @if (!matriculasActivas.Any())
         {
             <div class="card-body text-center text-muted py-5">
                 <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                No tiene cursos matriculados. Explore las carreras disponibles.
+                No tiene cursos matriculados. Explore los cursos disponibles de su carrera.
             </div>
         }
         else
@@ -64,20 +69,24 @@ else
                             <th>Docente</th>
                             <th>Créditos</th>
                             <th>Estado</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var m in Model.Matriculas)
+                        @foreach (var m in matriculasActivas)
                         {
-                            <tr>
+                            <tr id="fila-matricula-@m.Id">
                                 <td><span class="badge bg-primary">@m.Curso?.Codigo</span></td>
                                 <td>@m.Curso?.Nombre</td>
                                 <td class="text-muted">@m.Curso?.Docente?.NombreCompleto</td>
                                 <td>@m.Curso?.Creditos</td>
                                 <td>
-                                    <span class="badge @(m.Estado == EstadoMatricula.Activa ? "bg-success" : "bg-secondary")">
-                                        @m.Estado
-                                    </span>
+                                    <span class="badge bg-success">@m.Estado</span>
+                                </td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-cancelar-matricula" data-matricula-id="@m.Id">
+                                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -86,4 +95,33 @@ else
             </div>
         }
     </div>
+
+    @if (Model.Matriculas.Any(m => m.Estado != EstadoMatricula.Activa))
+    {
+        <div class="card border-0 shadow-sm mt-3">
+            <div class="card-header bg-white">
+                <span class="fw-semibold text-muted"><i class="bi bi-clock-history me-2"></i>Historial (Canceladas / Completadas)</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <tbody>
+                        @foreach (var m in Model.Matriculas.Where(m => m.Estado != EstadoMatricula.Activa))
+                        {
+                            <tr>
+                                <td><span class="badge bg-secondary">@m.Curso?.Codigo</span></td>
+                                <td>@m.Curso?.Nombre</td>
+                                <td class="text-muted">@m.Estado</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    @Html.AntiForgeryToken()
+}
+
+@section Scripts {
+    <script src="~/js/matricula.js" asp-append-version="true"></script>
 }
