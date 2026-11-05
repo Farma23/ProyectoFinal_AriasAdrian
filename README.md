@@ -1,4 +1,4 @@
-# Sistema de Matrícula Universitaria — Avance 2
+# Sistema de Matrícula Universitaria — 
 
 **Estudiante:** Adrián José Arias Vargas  
 **Curso:** Programación Avanzada  
